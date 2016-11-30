@@ -56,12 +56,12 @@ WORKDIR /opt
 RUN mkdir mutect-src; cd mutect-src
 
 # get MuTect source
-RUN git clone git@github.com:broadinstitute/mutect.git; cd ..
+RUN git clone https://github.com/cgrlab/mutect.git; cd ..
 
 # get the GATK source and set to the latest tested version
-RUN git clone git@github.com:broadgsa/gatk-protected.git
+RUN git clone --recursive https://github.com/cgrlab/gatk-protected.git
 RUN cd gatk-protected
-RUN git reset --hard 2.7-1-g42d771f
+# RUN git reset --hard 2.7-1-g42d771f
 
 # build
 RUN ant -Dexternal.dir=`pwd`/../mutect-src -Dexecutable=mutect package
