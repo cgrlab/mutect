@@ -52,5 +52,18 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9 && \
 
 WORKDIR /opt
 
-RUN git clone --recursive https://github.com/cgrlab/mutect.git
-RUN unzip muTect-1.1.4-bin.zip
+# make a new source directory (e.g. mutect-src)
+RUN mkdir mutect-src; cd mutect-src
+
+# get MuTect source
+RUN git clone git@github.com:broadinstitute/mutect.git; cd ..
+
+# get the GATK source and set to the latest tested version
+RUN git clone git@github.com:broadgsa/gatk-protected.git
+RUN cd gatk-protected
+RUN git reset --hard 2.7-1-g42d771f
+
+# build
+RUN ant -Dexternal.dir=`pwd`/../mutect-src -Dexecutable=mutect package
+
+WORKDIR /opt
